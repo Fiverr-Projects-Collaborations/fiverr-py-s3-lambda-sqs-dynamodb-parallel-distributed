@@ -1,0 +1,80 @@
+Hello, I want you to create a distributed python program according to the attached file.
+It's should not be too complex. Please let me know if it's something you can do. Thank you!
+
+The idea is to simulate a crossroad. Every instance of EC2 will simulate a car inside the crossroad and one will be a traffic light.
+For example, if we have 5 instances, 4 of them will be cars and one will resemble a traffic light.
+Every car wants to cross the crossroad, but every car needs to check that the crossroad is free and can be crossed.
+Which can lead to Deadlock. The traffic light will need to use a deadlock algorithm. After that,
+he will then be able to transfer the information to any car where it can turn be using the wave algorithm
+(it's your choice). Then, when a car crosses the crossroad successfully,
+ with Lambda function we send a message to SQS which car crossed and where, after we have 5 messages within the SQS,
+ another Lambda function pull all the last 5 messages and enters them into the database.
+ When the program start each instance will download a simple file from S3 bucket and will choose randomly
+  which turn he want to take.
+
+The algorithms you can choose from are as written in the attached file.
+Those are: Snapshot, Wave, Dead Lock detection, Termination detection, Leader Election
+The deadlock detection is pretty right choose for this project, and the other one is up to you,
+but I think the wave one is also good one.
+If you google them i'm sure you will find info about them. If not, I will give you some info I have about them.
+
+
+
+
+
+anegi:
+based on the representation and document,
+let me tell you what I can do and what I need from you:
+1. Create 1 S3 bucket, each will contain 5 csv files (for each of 5 ec2 instance)
+2. Create 5 ec2 intances , each will have python code that will run at schduled time to pick respective csv files
+from each bucket and process something and send output to another s3 bucket.
+3. Lambda (in python) will be triggerred as soon as it gets file in second bucket and will send message to queue (SQS)
+4. each message again trigger different lambda (another python) which will save some data to dynamo db.
+ So,  5 py scripts in 5 ec2(can be same or different based on logic),
+ 2 py scripts hence 2 lambda functions,  2 s3 bucket,  5 ec2 instances  1 dynamo db
+
+
+
+
+ his reply:
+
+ OK sounds good, but the idea that we will simulate a crossroad, so if we have 5 Instances,
+ 4 instances will represent a car, and 1 insurance will represent a traffic light,
+  so something like a "master and slaves". Each slave tell the master where he want to go and the master make
+  sure everything will be OK, while also make sure there will be no deadlock
+
+ The idea is that 1 instance represents a master so he decides which car (the other instances) can cross the crossroad.
+ Because if everyone will cross in the same time there will be an "accident" between the cars.
+ So all the Instances tells him in the same time which turn they want to take, and his job is decide the order that each car will cross the crossroad.
+ While 1 car cross, the other will wait, so he also need to make sure that not every car is waiting for
+ all the other car (so no car is crossing at all and everyone is waiting) which is basically a deadlock.
+
+ So the master will use the deadlock algorithm to make sure there will be no deadlook and all the time
+ someone will cross the crossroad and he need also pass the information of which cross when,
+ and he can do it be using another algorithm that send a message to everyone.
+ We need the communication between all the Instances will be in parallel way, so we will use a parallel
+ algorithm (which I will provide to you the logic how to implement it)
+
+
+
+\[7:31 PM, 6/11/2020] Anirudh Negi: Wave :
+http://wiki.cas-group.net/index.php?title=Echo_Algorithm
+
+https://github.com/25mordad/Echo-Algorithm
+
+
+https://github.com/R-Alex95/Echo-wave
+[7:31 PM, 6/11/2020] Anirudh Negi: Deadlock :
+https://www.google.com/amp/s/www.geeksforgeeks.org/deadlock-detection-algorithm-in-operating-system/amp/
+
+https://prepinsta.com/operating-systems/deadlock-detection-algorithm/
+
+https://github.com/mindstorm38/pydld
+
+
+
+
+AWS account:
+email = oohana13@gmail.com
+password = Omer13amazon
+
